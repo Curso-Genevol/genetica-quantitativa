@@ -246,9 +246,12 @@ shinyServer(function(input, output) {
         theta = matrix(peakPool[sample(1:nrow(peakPool), input$n_peaks),], input$n_peaks, p)
         #plotW_bar(theta, mypalette = colorRampPalette(wes_palette(name = "Zissou1", type = "continuous")))
         set.seed(input$seed)
-        x = runSimulation("Integrated", rho = input$corr, n_peaks = input$n_peaks, p = 2, scale = 4, theta = theta)
+        x = runSimulation("Integrated", rho = input$corr_1, n_peaks = input$n_peaks, p = 2, scale = 4, theta = theta)
         p_x = gplotW_bar_trajectory(x, 8)
-        p_x
+        y = runSimulation("Integrated", rho = input$corr_2, n_peaks = input$n_peaks, p = 2, scale = 4, theta = theta)
+        p_y = gplotW_bar_trajectory(y, 8)
+        p_xy = plot_grid(p_x, p_y, labels = c("População 1", "População 2"))
+        p_xy
     })
 
 })

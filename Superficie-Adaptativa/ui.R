@@ -25,12 +25,19 @@ shinyUI(fluidPage(
                         step = 1,
                         value = 42)
             ,
-            sliderInput("corr",
-                        "Correlação genética:",
-                        min = -0.99,
-                        max = 0.99,
-                        step = 0.01,
-                        value = 0.5)
+            sliderInput("corr_1",
+                        "Correlação genética da população 1:",
+                        min = -1,
+                        max = 1,
+                        step = 0.05,
+                        value = 0.8)
+            ,
+            sliderInput("corr_2",
+                        "Correlação genética da população 2:",
+                        min = -1,
+                        max = 1,
+                        step = 0.05,
+                        value = 0.0)
             ,
             sliderInput("n_peaks",
                         "Número de picos adaptativos:",
