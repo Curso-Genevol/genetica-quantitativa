@@ -4,9 +4,9 @@ rsconnect::setAccountInfo(name='curso-genevol',
                           secret='secret_key')
 
 # Deploy
-
-rsconnect::deployApp("/home/diogro/projects/CursoGenevol-quantGen/Eq-de-Lande")
-rsconnect::deployApp("/home/diogro/projects/CursoGenevol-quantGen/Superficie-Adaptativa")
+if(!require(here)){install.packages("here"); library(here)}
+rsconnect::deployApp(here("Eq-de-Lande"))
+rsconnect::deployApp(here("Superficie-Adaptativa"))
 
 # Run local
 
