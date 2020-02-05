@@ -244,12 +244,26 @@ shinyServer(function(input, output) {
         peakPool = randomPeaks(100, p = 2, dz_limits = c(3, space_size), 
                                intervals = c(1), prop = c(1))
         theta = matrix(peakPool[sample(1:nrow(peakPool), input$n_peaks),], input$n_peaks, p)
-        #plotW_bar(theta, mypalette = colorRampPalette(wes_palette(name = "Zissou1", type = "continuous")))
+        
+        set.seed(input$seed)
+        G1 = matrix(c(1, input$corr_1, input$corr_1, 1), 2, 2)
+        x1 <- mvrnorm(n = 100, Sigma = G1, mu = c(10, 10))
+        df1 = data.frame(x = x1[,1], y = x1[,2])
+        p_xG = ggplot(df1, aes(x, y)) + geom_point() + stat_ellipse() + coord_fixed() + theme_nothing() 
+        
+        set.seed(input$seed)
+        G2 = matrix(c(1, input$corr_2, input$corr_2, 1), 2, 2)
+        x2 <- mvrnorm(n = 100, Sigma = G2, mu = c(10, 10))
+        df2 = data.frame(x = x2[,1], y = x2[,2])
+        p_yG = ggplot(df2, aes(x, y)) + geom_point() + stat_ellipse() + coord_fixed() + theme_nothing() 
+        
         set.seed(input$seed)
         x = runSimulation("Integrated", rho = input$corr_1, n_peaks = input$n_peaks, p = 2, scale = 4, theta = theta)
         p_x = gplotW_bar_trajectory(x, 8)
+        p_x = ggdraw(p_x) +  draw_plot(p_xG, .6, .8, .2, .2) 
         y = runSimulation("Integrated", rho = input$corr_2, n_peaks = input$n_peaks, p = 2, scale = 4, theta = theta)
         p_y = gplotW_bar_trajectory(y, 8)
+        p_y = ggdraw(p_y) +  draw_plot(p_yG, .6, .8, .2, .2)
         p_xy = plot_grid(p_x, p_y, labels = c("População 1", "População 2"))
         p_xy
     })
