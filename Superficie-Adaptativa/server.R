@@ -18,6 +18,7 @@ if(!require(wesanderson)) { install.packages("wesanderson"); library(wesanderson
 if(!require(mvtnorm)) { install.packages("mvtnorm"); library(mvtnorm) }
 if(!require(evolqg)){install.packages("evolqg"); library(evolqg)}
 if(!require(matrixStats)){install.packages("matrixStats"); library(matrixStats)}
+if(!require(MASS)){install.packages("MASS"); library(MASS)}
 
 
 gplotW_bar = function(theta, space_size = 6, xlimits = c(-space_size, space_size), ylimits = c(-space_size, space_size), resolution = 0.2,
