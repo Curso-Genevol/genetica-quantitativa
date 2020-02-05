@@ -7,10 +7,10 @@
 #    http://shiny.rstudio.com/
 #
 
-library(shiny)
 library(MASS)
-library(ggplot2)
-library(cowplot)
+
+if(!require(ggplot2)){install.packages("ggplot2"); library(ggplot2)}
+if(!require(cowplot)){install.packages("cowplot"); library(cowplot)}
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(

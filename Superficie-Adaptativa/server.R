@@ -8,7 +8,7 @@
 #
 
 library(shiny)
-if(!require(ContourFunctions)){devtools::install_github("CollinErickson/contour"); library(ContourFunctions)}
+if(!require(ContourFunctions)){install.packages("ContourFunctions"); library(ContourFunctions)}
 if(!require(ggplot2)){install.packages("ggplot2"); library(ggplot2)}
 if(!require(cowplot)){install.packages("cowplot"); library(cowplot)}
 theme_set(theme_cowplot())
