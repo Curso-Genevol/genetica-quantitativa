@@ -9,6 +9,6 @@ rsconnect::deployApp(here("Eq-de-Lande"))
 rsconnect::deployApp(here("Superficie-Adaptativa"))
 
 # Run local
-
+if(!require(shiny)){install.packages("shiny"); library(shiny)}
 runGitHub("genetica-quantitativa", "Curso-Genevol", subdir = "Eq-de-Lande")
 runGitHub("genetica-quantitativa", "Curso-Genevol", subdir = "Superficie-Adaptativa")
