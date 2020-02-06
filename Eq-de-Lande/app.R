@@ -59,7 +59,7 @@ server <- function(input, output) {
     output$distPlot <- renderPlot({
         # generate bins based on input$bins from ui.R
         G = matrix(c(1, input$corr, input$corr, 1), 2, 2)
-        set.seed(42)
+        set.seed(input$corr)
         x <- mvrnorm(n = 100, Sigma = G, mu = c(10, 10))
         df = data.frame(x = x[,1], y = x[,2])
         # draw the histogram with the specified number of bins
