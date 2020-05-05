@@ -16,17 +16,19 @@ if(!require(wesanderson)) { install.packages("wesanderson"); library(wesanderson
 #if(!require(grDevices)) { install.packages("grDevices"); library(grDevices) }
 
 if(!require(mvtnorm)) { install.packages("mvtnorm"); library(mvtnorm) }
-if(!require(evolqg)){install.packages("evolqg"); library(evolqg)}
 if(!require(matrixStats)){install.packages("matrixStats"); library(matrixStats)}
 if(!require(MASS)){install.packages("MASS"); library(MASS)}
 
+Norm = function(x) sqrt(sum(x^2))
+
+Normalize = function(x) x / Norm(x)
 
 gplotW_bar = function(theta, space_size = 6, xlimits = c(-space_size, space_size), ylimits = c(-space_size, space_size), resolution = 0.2,
-                      mypalette = colorRampPalette(c("white", wes_palette(10, name = "Zissou1", type = "continuous"), "darkred")), 
+                      mypalette = colorRampPalette(c("white", wes_palette(10, name = "Zissou1", type = "continuous"), "darkred")),
                       log = FALSE, main = "", ...){
     W_bar = W_bar_factory(theta)
-    x <- seq(xlimits[1], xlimits[2], resolution) 
-    y <- seq(ylimits[1], ylimits[2], resolution) 
+    x <- seq(xlimits[1], xlimits[2], resolution)
+    y <- seq(ylimits[1], ylimits[2], resolution)
     X <- as.matrix(expand.grid(x, y))
     Z <- vector()
     for(i in 1:nrow(X)){
@@ -34,19 +36,19 @@ gplotW_bar = function(theta, space_size = 6, xlimits = c(-space_size, space_size
     }
     if(log) { Z = Z - logSumExp(Z)
     } else Z = exp(Z - logSumExp(Z))
-    gcf_grid(x, y, Z, xlim = xlimits, ylim = ylimits, color.palette = mypalette, 
-             main = main, mainminmax = FALSE, mainminmax_minmax = FALSE, ...) + 
-        geom_point(data=data.frame(theta), aes(X1, X2), shape = 17) + ggtitle(main) + 
+    gcf_grid(x, y, Z, xlim = xlimits, ylim = ylimits, color.palette = mypalette,
+             main = main, mainminmax = FALSE, mainminmax_minmax = FALSE, ...) +
+        geom_point(data=data.frame(theta), aes(X1, X2), shape = 17) + ggtitle(main) +
         coord_fixed() + theme_void() + theme(legend.position = "none") +
         geom_segment(aes(x = 0, xend = 0, y = ylimits[1], yend = ylimits[2])) + geom_segment(aes(y = 0, yend = 0, x = xlimits[1], xend = xlimits[2]))
 }
 
 gplotW_bar_trajectory = function(run, space_size = 6, xlimits = c(-space_size, space_size), ylimits = c(-space_size, space_size), resolution = 0.2,
-                                 mypalette = colorRampPalette(c("white", wes_palette(10, name = "Zissou1", type = "continuous"), "darkred")), 
+                                 mypalette = colorRampPalette(c("white", wes_palette(10, name = "Zissou1", type = "continuous"), "darkred")),
                                  log = FALSE, main = "", ...){
     W_bar = W_bar_factory(run$theta)
-    x <- seq(xlimits[1], xlimits[2], resolution) 
-    y <- seq(ylimits[1], ylimits[2], resolution) 
+    x <- seq(xlimits[1], xlimits[2], resolution)
+    y <- seq(ylimits[1], ylimits[2], resolution)
     X <- as.matrix(expand.grid(x, y))
     Z <- vector()
     for(i in 1:nrow(X)){
@@ -54,9 +56,9 @@ gplotW_bar_trajectory = function(run, space_size = 6, xlimits = c(-space_size, s
     }
     if(log) { Z = Z - logSumExp(Z)
     } else Z = exp(Z - logSumExp(Z))
-    gcf_grid(x, y, Z, xlim = xlimits, ylim = ylimits, color.palette = mypalette, mainminmax = FALSE, mainminmax_minmax = FALSE, ...) + 
-        geom_point(data=data.frame(run$theta), aes(X1, X2), shape = 17) + 
-        geom_point(data=data.frame(run$trajectory), aes(X1, X2), shape = 19) + 
+    gcf_grid(x, y, Z, xlim = xlimits, ylim = ylimits, color.palette = mypalette, mainminmax = FALSE, mainminmax_minmax = FALSE, ...) +
+        geom_point(data=data.frame(run$theta), aes(X1, X2), shape = 17) +
+        geom_point(data=data.frame(run$trajectory), aes(X1, X2), shape = 19) +
         ggtitle(main) + coord_fixed() + theme_void() + theme(legend.position = "none") +
         geom_segment(aes(x = 0, xend = 0, y = ylimits[1], yend = ylimits[2])) + geom_segment(aes(y = 0, yend = 0, x = xlimits[1], xend = xlimits[2]))
 }
@@ -90,13 +92,13 @@ rbeta_mixture = function(n, shapes1, shapes2, alpha){
     for(i in 1:n){
         if(runif(1) > alpha){
             out[i] = f1(1)
-        }else 
+        }else
             out[i] = f2(1)
     }
     out
 }
 
-randomPeaks = function(n = n_peaks, p = n_traits, x = rep(1, p), intervals = 1, prop = 1, dz_limits, 
+randomPeaks = function(n = n_peaks, p = n_traits, x = rep(1, p), intervals = 1, prop = 1, dz_limits,
                        max_uniform = n * 100, sigma_init = 2, sigma_step = 0.01, verbose = FALSE){
     steps = length(intervals)
     counter = vector("numeric", steps)
@@ -180,8 +182,8 @@ calculateTrajectory <- function (start_position, G, W_bar, W_bar_grad, scale = 2
     betas = betas[!is.na(betas[,1]),]
     net_dz = trajectory[dim(trajectory)[1],] - start_position
     return(list(start_position = start_position,
-                trajectory = trajectory, 
-                betas = betas, 
+                trajectory = trajectory,
+                betas = betas,
                 net_beta = net_beta,
                 net_dz = net_dz))
 }
@@ -240,28 +242,28 @@ ReplaceDiagonal = function(x, d){
 shinyServer(function(input, output) {
 
     output$distPlot <- renderPlot({
-        p = 2    
+        p = 2
         set.seed(input$seed * input$n_peaks)
-        peakPool = randomPeaks(100, p = 2, dz_limits = c(3, space_size), 
+        peakPool = randomPeaks(100, p = 2, dz_limits = c(3, space_size),
                                intervals = c(1), prop = c(1))
         theta = matrix(peakPool[sample(1:nrow(peakPool), input$n_peaks),], input$n_peaks, p)
-        
+
         set.seed(input$seed * input$n_peaks)
         G1 = matrix(c(1, input$corr_1, input$corr_1, 1), 2, 2)
         x1 <- mvrnorm(n = 100, Sigma = G1, mu = c(10, 10))
         df1 = data.frame(x = x1[,1], y = x1[,2])
-        p_xG = ggplot(df1, aes(x, y)) + geom_point() + stat_ellipse() + coord_fixed() + theme_nothing() 
-        
+        p_xG = ggplot(df1, aes(x, y)) + geom_point() + stat_ellipse() + coord_fixed() + theme_nothing()
+
         set.seed(input$seed * input$n_peaks)
         G2 = matrix(c(1, input$corr_2, input$corr_2, 1), 2, 2)
         x2 <- mvrnorm(n = 100, Sigma = G2, mu = c(10, 10))
         df2 = data.frame(x = x2[,1], y = x2[,2])
-        p_yG = ggplot(df2, aes(x, y)) + geom_point() + stat_ellipse() + coord_fixed() + theme_nothing() 
-        
+        p_yG = ggplot(df2, aes(x, y)) + geom_point() + stat_ellipse() + coord_fixed() + theme_nothing()
+
         set.seed(input$seed * input$n_peaks)
         x = runSimulation("Integrated", rho = input$corr_1, n_peaks = input$n_peaks, p = 2, scale = 4, theta = theta)
         p_x = gplotW_bar_trajectory(x, 8)
-        p_x = ggdraw(p_x) +  draw_plot(p_xG, .6, .8, .2, .2) 
+        p_x = ggdraw(p_x) +  draw_plot(p_xG, .6, .8, .2, .2)
         y = runSimulation("Integrated", rho = input$corr_2, n_peaks = input$n_peaks, p = 2, scale = 4, theta = theta)
         p_y = gplotW_bar_trajectory(y, 8)
         p_y = ggdraw(p_y) +  draw_plot(p_yG, .6, .8, .2, .2)
