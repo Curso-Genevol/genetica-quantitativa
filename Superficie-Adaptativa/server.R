@@ -23,26 +23,6 @@ Norm = function(x) sqrt(sum(x^2))
 
 Normalize = function(x) x / Norm(x)
 
-gplotW_bar = function(theta, space_size = 6, xlimits = c(-space_size, space_size), ylimits = c(-space_size, space_size), resolution = 0.2,
-                      mypalette = colorRampPalette(c("white", wes_palette(10, name = "Zissou1", type = "continuous"), "darkred")),
-                      log = FALSE, main = "", ...){
-    W_bar = W_bar_factory(theta)
-    x <- seq(xlimits[1], xlimits[2], resolution)
-    y <- seq(ylimits[1], ylimits[2], resolution)
-    X <- as.matrix(expand.grid(x, y))
-    Z <- vector()
-    for(i in 1:nrow(X)){
-        Z[i] <- W_bar(c(X[i,1], X[i,2]))
-    }
-    if(log) { Z = Z - logSumExp(Z)
-    } else Z = exp(Z - logSumExp(Z))
-    gcf_grid(x, y, Z, xlim = xlimits, ylim = ylimits, color.palette = mypalette,
-             main = main, mainminmax = FALSE, mainminmax_minmax = FALSE, ...) +
-        geom_point(data=data.frame(theta), aes(X1, X2), shape = 17) + ggtitle(main) +
-        coord_fixed() + theme_void() + theme(legend.position = "none") +
-        geom_segment(aes(x = 0, xend = 0, y = ylimits[1], yend = ylimits[2])) + geom_segment(aes(y = 0, yend = 0, x = xlimits[1], xend = xlimits[2]))
-}
-
 gplotW_bar_trajectory = function(run, space_size = 6, xlimits = c(-space_size, space_size), ylimits = c(-space_size, space_size), resolution = 0.2,
                                  mypalette = colorRampPalette(c("white", wes_palette(10, name = "Zissou1", type = "continuous"), "darkred")),
                                  log = FALSE, main = "", ...){
@@ -68,7 +48,6 @@ max_gens = 10000
 max_stand_still = 100
 space_size = 6
 
-
 mypalette = colorRampPalette(c(wes_palette(10, name = "Zissou1", type = "continuous"), "darkred"))(50)
 
 vector_cor = function(x, y) abs(x %*% y/(Norm(x)*Norm(y)))
@@ -83,19 +62,6 @@ W_bar_gradient_factory = function(theta_matrix, w_cov = NULL){
     } else{
         function(x) rowSums(apply(theta_matrix, 1, function(theta) - dmvnorm(x, mean = theta, w_cov) * solve(w_cov, x - theta)))/exp(W_bar_factory(theta_matrix, w_cov)(x))
     }
-}
-
-rbeta_mixture = function(n, shapes1, shapes2, alpha){
-    f1 = function(x) rbeta(x, shapes1[1], shapes1[2])
-    f2 = function(x) rbeta(x, shapes2[1], shapes2[2])
-    out = numeric(n)
-    for(i in 1:n){
-        if(runif(1) > alpha){
-            out[i] = f1(1)
-        }else
-            out[i] = f2(1)
-    }
-    out
 }
 
 randomPeaks = function(n = n_peaks, p = n_traits, x = rep(1, p), intervals = 1, prop = 1, dz_limits,
@@ -231,12 +197,6 @@ G_factory = function(p, rho, sigma = 0.1){
     G
 }
 
-ReplaceDiagonal = function(x, d){
-    d = sqrt(d)
-    c.x = cov2cor(x)
-    d = sqrt(diag(x))
-    outer(d, d) * c.x
-}
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
