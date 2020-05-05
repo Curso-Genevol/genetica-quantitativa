@@ -28,3 +28,4 @@ vignettes/*.pdf
 .Renviron
 CursoGenevol-quantGen.Rproj
 deploy_all.R
+CursoGenevolQuantGen.Rproj

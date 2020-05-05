@@ -202,7 +202,7 @@ runSimulation = function(G_type = c("Diagonal", "Integrated"), G = NULL,
     if(n_peaks == 1){
         Surface_type = "Single"
     } else
-        Surface_type = "Muliple"
+        Surface_type = "Multiple"
     if(is.null(theta)) theta = matrix(peakPool[sample(1:nrow(peakPool), n_peaks),], n_peaks, p)
     W_bar = W_bar_factory(theta)
     W_bar_grad = W_bar_gradient_factory(theta)
