@@ -16,33 +16,33 @@ if(!require(cowplot)){install.packages("cowplot"); library(cowplot)}
 ui <- fluidPage(
     
     # Application title
-    titlePanel("Visualizando a Equação de Lande"),
+    titlePanel("Visualizing the Lande Equation"),
     
     # Sidebar with a slider input for number of bins 
     sidebarLayout(
         sidebarPanel(
             sliderInput("corr",
-                        "Correlação genética:",
+                        "Genetic correlation:",
                         min = -1,
                         max = 1,
                         step = 0.01,
                         value = 0.5)
             ,
             sliderInput("beta_norm",
-                        "Intensidade de Seleção:",
+                        "Strength of selection:",
                         min = 0,
                         max = 2,
                         step = 0.01,
                         value = 0)
             ,
             sliderInput("beta_angle",
-                        "Direção de Seleção:",
+                        "Direction of selection:",
                         min = 0,
                         max = 360,
                         step = 1,
                         value = 60),
-            checkboxInput("show_response", "Mostrar vetor de resposta (delta Z)", FALSE),
-            checkboxInput("next_gen", "Mostrar próxima geração.", FALSE)
+            checkboxInput("show_response", "Show response vector (delta Z)", FALSE),
+            checkboxInput("next_gen", "Show next generation.", FALSE)
             
         ),
         
@@ -63,7 +63,7 @@ server <- function(input, output) {
         x <- mvrnorm(n = 100, Sigma = G, mu = c(10, 10))
         df = data.frame(x = x[,1], y = x[,2])
         # draw the histogram with the specified number of bins
-        p = ggplot(df, aes(x, y)) + geom_point() + theme_cowplot() + labs(x = "Caráter x", y = "Caráter y")  + stat_ellipse() + coord_fixed()
+        p = ggplot(df, aes(x, y)) + geom_point() + theme_cowplot() + labs(x = "Trait x", y = "Trait y")  + stat_ellipse() + coord_fixed()
         if(input$beta_norm > 0){
             beta_x = cos(input$beta_angle / 180 * pi) * input$beta_norm
             beta_y = sin(input$beta_angle / 180 * pi) * input$beta_norm
