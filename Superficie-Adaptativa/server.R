@@ -23,9 +23,16 @@ Norm = function(x) sqrt(sum(x^2))
 
 Normalize = function(x) x / Norm(x)
 
-gplotW_bar_trajectory = function(run, space_size = 6, xlimits = c(-space_size, space_size), ylimits = c(-space_size, space_size), resolution = 0.2,
-                                 mypalette = colorRampPalette(c("white", wes_palette(10, name = "Zissou1", type = "continuous"), "darkred")),
-                                 log = FALSE, main = "", ...){
+gplotW_bar_trajectory <-
+    function(run, space_size = 6, xlimits = c(-space_size, 
+                                              space_size), 
+             ylimits = c(-space_size, space_size), resolution = 0.2,
+             mypalette = colorRampPalette(c("white", 
+                                            wes_palette(10, 
+                                                        name = "Zissou1", 
+                                                        type = "continuous"), 
+                                            "darkred")),
+             log = FALSE, main = "", ...){
     W_bar = W_bar_factory(run$theta)
     x <- seq(xlimits[1], xlimits[2], resolution)
     y <- seq(ylimits[1], ylimits[2], resolution)
@@ -36,11 +43,15 @@ gplotW_bar_trajectory = function(run, space_size = 6, xlimits = c(-space_size, s
     }
     if(log) { Z = Z - logSumExp(Z)
     } else Z = exp(Z - logSumExp(Z))
-    gcf_grid(x, y, Z, xlim = xlimits, ylim = ylimits, color.palette = mypalette, mainminmax = FALSE, mainminmax_minmax = FALSE, ...) +
+    gcf_grid(x, y, Z, xlim = xlimits, ylim = ylimits, 
+             color.palette = mypalette, mainminmax = FALSE, 
+             mainminmax_minmax = FALSE, ...) +
         geom_point(data=data.frame(run$theta), aes(X1, X2), shape = 17) +
         geom_point(data=data.frame(run$trajectory), aes(X1, X2), shape = 19) +
-        ggtitle(main) + coord_fixed() + theme_void() + theme(legend.position = "none") +
-        geom_segment(aes(x = 0, xend = 0, y = ylimits[1], yend = ylimits[2])) + geom_segment(aes(y = 0, yend = 0, x = xlimits[1], xend = xlimits[2]))
+        ggtitle(main) + coord_fixed() + theme_void() + 
+        theme(legend.position = "none") +
+        geom_segment(aes(x = 0, xend = 0, y = ylimits[1], yend = ylimits[2])) + 
+        geom_segment(aes(y = 0, yend = 0, x = xlimits[1], xend = xlimits[2]))
 }
 
 diff_cut_off = 1e-4
@@ -227,7 +238,7 @@ shinyServer(function(input, output) {
         y = runSimulation("Integrated", rho = input$corr_2, n_peaks = input$n_peaks, p = 2, scale = 4, theta = theta)
         p_y = gplotW_bar_trajectory(y, 8)
         p_y = ggdraw(p_y) +  draw_plot(p_yG, .6, .8, .2, .2)
-        p_xy = plot_grid(p_x, p_y, labels = c("População 1", "População 2"))
+        p_xy = plot_grid(p_x, p_y, labels = c("Population 1", "Population 2"))
         p_xy
     })
 

@@ -13,34 +13,34 @@ library(shiny)
 shinyUI(fluidPage(
 
     # Application title
-    titlePanel("Superficies Adaptativas"),
+    titlePanel("Adaptive surfaces"),
 
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
             sliderInput("seed",
-                        "Índice da simulação:",
+                        "Simulation random seed:",
                         min = 0,
                         max = 100,
                         step = 1,
                         value = 42)
             ,
             sliderInput("corr_1",
-                        "Correlação genética da população 1:",
+                        "Genetic correlation of population 1:",
                         min = -1,
                         max = 1,
                         step = 0.05,
                         value = 0.8)
             ,
             sliderInput("corr_2",
-                        "Correlação genética da população 2:",
+                        "Genetic correlation of population 2:",
                         min = -1,
                         max = 1,
                         step = 0.05,
                         value = 0.0)
             ,
             sliderInput("n_peaks",
-                        "Número de picos adaptativos:",
+                        "Number of adaptive peaks:",
                         min = 1,
                         max = 10,
                         step = 1,
